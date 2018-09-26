@@ -47,9 +47,9 @@ class MicroIntercom(Thread):
 
     def processSyncedFunction(self, address, *args):
         if address in self.syncedFunctions:
-            print ("processing synced function call...")
+            #print ("processing synced function call...")
             result = self.syncedFunctions[address](address, args)
-            print ("result:", result)
+            #print ("result:", result)
             self.client.send_message(address, result)
 
     def processSyncFunctionCallback(self, address, *args):
@@ -58,11 +58,15 @@ class MicroIntercom(Thread):
 
     # API:
 
-    def addAsyncFunction(self, address, callback):
+    def addAsyncFunction(self, address, callback, replace=False):
+        if replace and address in self.dispatcher._map:
+            del self.dispatcher._map[address]
         self.dispatcher.map(address, callback)
         print("async function added on ", address)
 
-    def addSyncFunction(self, address, callback):
+    def addSyncFunction(self, address, callback, replace=False):
+        if replace and address in self.dispatcher._map:
+            del self.dispatcher._map[address]
         self.syncedFunctions[address] = callback
         self.dispatcher.map(address, self.processSyncedFunction)
 
