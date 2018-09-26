@@ -48,7 +48,7 @@ class MicroIntercom(Thread):
     def processSyncedFunction(self, address, *args):
         if address in self.syncedFunctions:
             #print ("processing synced function call...")
-            result = self.syncedFunctions[address](address, args)
+            result = self.syncedFunctions[address](address, *args)
             #print ("result:", result)
             self.client.send_message(address, result)
 
@@ -97,8 +97,7 @@ def syncFuncTest(address, *args):
     return [23 * args[0][0], 2 * args[0][0], 12 * args[0][0]]
 
 
-#
-#
+
 # mI = MicroIntercom("localhost", 30000, "localhost", 30001)
 # mI.start()
 # mI.addAsyncFunction("/tester", asyncFuncTest)
@@ -107,8 +106,26 @@ def syncFuncTest(address, *args):
 #
 # r = mI.callSyncFunction("/multiply", [random.random(), random.random()])
 # r = mI.callAsyncFunction("/addcircle", [random.random() * 1024, random.random() * 768])
-#
+
+
+
+
+
 # c = 0
 # while(True):
 #     c += 1
 
+
+# def blocker():
+#     while True:
+#         print("Oh, sorry, am I in the way?")
+#         time.sleep(1)
+#
+# t = threading.Thread(name='child procs', target=blocker)
+# t.start()
+#
+# # Prove that we passed through the blocking call
+
+
+
+print ("No, that's okay")
