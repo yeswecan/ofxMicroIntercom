@@ -71,6 +71,7 @@ public:
     }
     
     void callAsync(std::string address, IMessage m) {
+		m.setAddress(address);
         sendMessageThroughMutex(m);
     }
     
@@ -105,7 +106,6 @@ public:
 		float starttime = ofGetElapsedTimef();
 
         m.setAddress(address);
-        
         sendMessageThroughMutex(m);
         
 //        callSyncLock = false;

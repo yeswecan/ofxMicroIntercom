@@ -19,11 +19,18 @@ void ofApp::setup(){
     intercom.addAsyncFunction("/addcircle", [&](IMessage m) {
         circles.push_back(ofPoint(m.asFloatVector()[0], m.asFloatVector()[1]));
     });
-    
+
+    intercom.addSyncFunction("/multiply", [&](IMessage m)->IMessage {
+        ofLog() << "sync function called";
+        return {m.asFloatVector()[0] * m.asFloatVector()[1]};
+    });
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	ofVec2f mouse(1.0f * mouseX / ofGetWidth() - 0.5, 1.0f * mouseY / ofGetHeight() - 0.5);
+	auto r = intercom.callSync("/mouse",{ mouse.x , mouse.y });
+	 
     intercom.update();
 }
 
@@ -41,7 +48,7 @@ void ofApp::keyPressed(int key){
     f.push_back(0.25);
     
     auto i = intercom.callSync("/synctest", {ofRandomuf()}).asFloatVector();
-    ofLog() << "got response " << i[0] << " " << i[1] << " " << i[2];
+    if(i.size() > 0) ofLog() << "got response " << i[0] << " " << i[1] << " " << i[2];
 }
 
 //--------------------------------------------------------------
